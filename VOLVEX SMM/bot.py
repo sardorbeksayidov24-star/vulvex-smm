@@ -2,7 +2,7 @@ import asyncio
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
-from aiogram.utils.keyboard import InlineKeyboardBuilder
+
 # --- 1. SOZLAMALAR ---
 BOT_TOKEN = "8835809644:AAFapOaMC8SXgxISGTq7Jz9huCmLYLO7oAU"
 ADMIN_ID = 6831436355
@@ -110,45 +110,50 @@ async def show_balance(message: types.Message):
 async def start_payment(message: types.Message):
     client_id = message.from_user.id
     
+    # Karta raqamingiz va ismingizni shu yerga aniq yozing:
+    KARTA_RAQAM = "8600123456789012"  # O'zingizning karta raqamingizni yozing
+    KARTA_NOMI = "Sardorbek S."       # Karta egasining ismi
+    
     pay_buttons = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🔸 Payme [ Avto ]", url="https://payme.uz")],
+        # Payme orqali to'g'ridan-to'g'ri kartangizga o'tkazish tugmasi
+        [InlineKeyboardButton(text="💳 Karta orqali (Payme P2P)", url=f"https://payme.uz/p2p/{KARTA_RAQAM}")],
+        # Avto-to'lov tizimlari havolalari
+        [InlineKeyboardButton(text="🔸 Payme [ Avto-Neo SMM ]", url=f"https://payme.uz/fallback/paynet/search?keyword=Neo+smm&id={client_id}")],
         [InlineKeyboardButton(text="🔹 Click [ Avto ]", url="https://click.uz")],
         [InlineKeyboardButton(text="🍇 Uzum [ Avto ] +2% bonus", url="https://uzumbank.uz")],
         [InlineKeyboardButton(text="🟢 Paynet [ avto ]", url="https://paynet.uz")],
-        [InlineKeyboardButton(text="🔵 Oson [ Avto ]", url="https://oson.uz")],
-        [InlineKeyboardButton(text="💳 Uzcard / Humo ( karta ) +2% bonus", url="https://payme.uz")],
-        [InlineKeyboardButton(text="☎️ Adminga murojaat", url="https://t.me/SardorbekSayitov")]
+        [InlineKeyboardButton(text="☎️ Adminga chek yuborish", url="https://t.me/SardorbekSayitov")]
     ])
     
     text = (
-        "🔸 Payme, 🔹 Click, 🍇 Uzum, 🟢 Paynet,\n"
-        "🔵 Oson, 🟡 Alif - ilovalariga kiring To'lov\n"
-        "bo'limidan *Neo smm* deb qidiring va botdagi\n"
-        "ID raqamingizni kiritib to'lov qilish tugmasini\n"
-        "bosing.\n\n"
-        f"👤 *ID raqam:* {client_id}"
+        "👋 *Hisobni to'ldirish bo'limiga xush kelibsiz!*\n\n"
+        "💳 1-USUL: KАRTАGА TO'G'RIDАN-TO'G'RI O'TKАZISH\n"
+        "Pastdagi karta raqamiga pul o'tkazing:\n\n"
+        f"📌 *Karta raqam:* {KARTA_RAQAM}\n"
+        f"👤 *Ega:* {KARTA_NOMI}\n\n"
+        "⚠️ *Muhim:* Pulni o'tkazgach, chekni (skrinshot) va botdagi "
+        "ID raqamingizni '☎️ Adminga chek yuborish' tugmasi orqali adminga yuboring. "
+        "Balansingiz tezda yangilanadi.\n\n"
+        "━━━━━━━━━━━━━━━━━━━\n\n"
+        "🟢 2-USUL: ILОВАLАR ORQАLI (АVTO)\n"
+        "Payme, Click, Uzum yoki Paynet ilovalariga kiring.\n"
+        "To'lov bo'limidan 'Neo smm' deb qidiring va\n"
+        "botdagi ID raqamingizni kiritib to'lov qiling.\n\n"
+        f"👤 *Sizning ID raqamingiz:* {client_id}"
     )
     
     await message.answer(text, reply_markup=pay_buttons, parse_mode="Markdown")
-    # --- 7. SOZLANAYOTGAN TUGMALAR JAVOBI ---
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-
-@dp.message(F.text == "🛍️ Telegram") # Yoki menyudagi tugmangiz nomi nima bo'lsa, o'shani yozing
-async def telegram_menu(message: types.Message):
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="👤 Telegram obunachi", callback_data="tg_subs")],
-        [InlineKeyboardButton(text="⭐ Premium obunachi", callback_data="tg_prem")],
-        [InlineKeyboardButton(text="📢 Boost hikoyalarga ovoz", callback_data="tg_boost")],
-        [InlineKeyboardButton(text="📊 Ovoz | So'rovnoma", callback_data="tg_poll")],
-        [InlineKeyboardButton(text="👁️ Prosmotrlar", callback_data="tg_views")],
-        [InlineKeyboardButton(text="👍|👎 Reaksiyalar", callback_data="tg_reactions")],
-        [InlineKeyboardButton(text="📖 Istoriya ko'rish", callback_data="tg_story")],
-        [InlineKeyboardButton(text="🤖 Bot uchun START", callback_data="tg_start")],
-        [InlineKeyboardButton(text="✉️ Izohlar + 🔄 Ulashishlar", callback_data="tg_comments")],
-        [InlineKeyboardButton(text="🔙 Orqaga", callback_data="main_menu")]
-    ])
     
-    await message.answer("🛍️ Telegram\n\nQuyidagi ichki bo'limlardan birini tanlang:", reply_markup=kb)
+    await message.answer(text, reply_markup=pay_buttons, parse_mode="Markdown")
+    # --- 7. SOZLANAYOTGAN TUGMALAR JAVOBI ---
+@dp.message(F.text.in_({
+    "🎮 Pubg Uc", "🎮 Free Fire Almaz", "🎮 Mobile Legends",
+    "🛍️ Telegram", "🛍️ Instagram", "🛍️ Tik Tok", "🛍️ You tube", "🛍️ Facebook", "🛍️ Threads", "⭐ Premium, Starts, Gift",
+    "👥 Referal", "📊 Buyurtmalarim", "📕 Qo'llanma", "☎️ Qo'llab-quvvatlash", "🤝 Hamkorlik dasturi"
+}))
+async def placeholder_commands(message: types.Message):
+    await message.answer(f"⚙️ {message.text} bo'limi hozirda sozlanmoqda. Tez orada to'liq ishga tushadi!")
+
 # --- BOTNI ISHGA TUSHIRISH ---
 async def main():
     print("Bot muvaffaqiyatli ishga tushdi...")
@@ -156,19 +161,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-   # --- INSTAGRAM VA ORQAGA QAYTISH ---
-@dp.message(F.text == "🛍️ Instagram")
-async def instagram_menu(message: types.Message):
-    builder = InlineKeyboardBuilder()
-    builder.row(types.InlineKeyboardButton(text="👤 Instagram obunachilar", callback_data="ig_subs"))
-    builder.row(types.InlineKeyboardButton(text="👁️ Prasmo'tr", callback_data="ig_views"))
-    builder.row(types.InlineKeyboardButton(text="❤️ Like", callback_data="ig_likes"))
-    builder.row(types.InlineKeyboardButton(text="🔙 Orqaga", callback_data="main_menu"))
-    
-    await message.answer("🛍️ Instagram xizmatlari\n\nQuyidagi bo'limlardan birini tanlang:", 
-                         reply_markup=builder.as_markup(), parse_mode="Markdown")
-
-@dp.callback_query(F.data == "main_menu")
-async def back_to_main(callback: types.CallbackQuery):
-    await callback.message.delete()
-    await callback.message.answer("Siz asosiy menyudasiz!")
