@@ -131,14 +131,21 @@ async def start_payment(message: types.Message):
     
     await message.answer(text, reply_markup=pay_buttons, parse_mode="Markdown")
     # --- 7. SOZLANAYOTGAN TUGMALAR JAVOBI ---
-@dp.message(F.text.in_({
-    "🎮 Pubg Uc", "🎮 Free Fire Almaz", "🎮 Mobile Legends",
-    "🛍️ Telegram", "🛍️ Instagram", "🛍️ Tik Tok", "🛍️ You tube", "🛍️ Facebook", "🛍️ Threads", "⭐ Premium, Starts, Gift",
-    "👥 Referal", "📊 Buyurtmalarim", "📕 Qo'llanma", "☎️ Qo'llab-quvvatlash", "🤝 Hamkorlik dasturi"
-}))
-async def placeholder_commands(message: types.Message):
-    await message.answer(f"⚙️ {message.text} bo'limi hozirda sozlanmoqda. Tez orada to'liq ishga tushadi!")
-
+# --- INSTAGRAM TUGMASI UCHUN YANGI KOD ---
+@dp.message(F.text == "🛍️ Instagram")
+async def instagram_menu(message: types.Message):
+    kb = InlineKeyboardMarkup(inline_keyboard=[
+        [
+            InlineKeyboardButton(text="👤 Obunachi", callback_data="insta_subs"),
+            InlineKeyboardButton(text="❤️ Layk", callback_data="insta_likes")
+        ],
+        [
+            InlineKeyboardButton(text="👁 Prosmotr", callback_data="insta_views")
+        ]
+    ])
+    
+    await message.answer("📸 Instagram xizmatlari\n\nQuyidagilardan birini tanlang:", 
+                         reply_markup=kb, parse_mode="Markdown")
 # --- BOTNI ISHGA TUSHIRISH ---
 async def main():
     print("Bot muvaffaqiyatli ishga tushdi...")
