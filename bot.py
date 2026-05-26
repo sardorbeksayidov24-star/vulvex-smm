@@ -156,9 +156,9 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-   # --- INSTAGRAM VA ORQAGA QAYTISH ---
+  # --- INSTAGRAM MENYUSI (YANGI VA TOZA) ---
 @dp.message(F.text == "🛍️ Instagram")
-async def instagram_menu(message: types.Message):
+async def instagram_services(message: types.Message):
     builder = InlineKeyboardBuilder()
     builder.row(types.InlineKeyboardButton(text="👤 Instagram obunachilar", callback_data="ig_subs"))
     builder.row(types.InlineKeyboardButton(text="👁️ Prasmo'tr", callback_data="ig_views"))
@@ -168,6 +168,7 @@ async def instagram_menu(message: types.Message):
     await message.answer("🛍️ Instagram xizmatlari\n\nQuyidagi bo'limlardan birini tanlang:", 
                          reply_markup=builder.as_markup(), parse_mode="Markdown")
 
+# --- ASOSIY MENYUGA QAYTISH ---
 @dp.callback_query(F.data == "main_menu")
 async def back_to_main(callback: types.CallbackQuery):
     await callback.message.delete()
