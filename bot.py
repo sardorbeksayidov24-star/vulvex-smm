@@ -75,7 +75,7 @@ async def services_command(message: types.Message):
         "👇 Quyidagi ijtimoiy tarmoqlardan birini tanlang.",
         reply_markup=services_builder.as_markup(resize_keyboard=True)
     )
-
+@dp.message(F.text == "🛍️ Instagram")
 # --- 4. DANAT QILISH BO'LIMI ---
 @dp.message(F.text == "🎟️ Danat qilish")
 async def donat_shop_command(message: types.Message):
