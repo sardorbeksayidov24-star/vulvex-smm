@@ -131,18 +131,24 @@ async def start_payment(message: types.Message):
     
     await message.answer(text, reply_markup=pay_buttons, parse_mode="Markdown")
     # --- 7. SOZLANAYOTGAN TUGMALAR JAVOBI ---
-# --- TELEGRAM XIZMATLARI MENYUSI ---
-@dp.message(F.text == "🛍️ Telegram")
-async def telegram_services(message: types.Message):
-    # Neo SMM kabi chiroyli tugmalar ro'yxati
-    builder = InlineKeyboardBuilder()
-    builder.row(types.InlineKeyboardButton(text="👤 Telegram obunachi", callback_data="tg_subs"))
-    builder.row(types.InlineKeyboardButton(text="⭐ Premium obunachi", callback_data="tg_prem"))
-    builder.row(types.InlineKeyboardButton(text="📢 Prosmotrlar", callback_data="tg_views"))
-    builder.row(types.InlineKeyboardButton(text="🔙 Orqaga", callback_data="main_menu"))
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+
+@dp.message(F.text == "🛍️ Telegram") # Yoki menyudagi tugmangiz nomi nima bo'lsa, o'shani yozing
+async def telegram_menu(message: types.Message):
+    kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="👤 Telegram obunachi", callback_data="tg_subs")],
+        [InlineKeyboardButton(text="⭐ Premium obunachi", callback_data="tg_prem")],
+        [InlineKeyboardButton(text="📢 Boost hikoyalarga ovoz", callback_data="tg_boost")],
+        [InlineKeyboardButton(text="📊 Ovoz | So'rovnoma", callback_data="tg_poll")],
+        [InlineKeyboardButton(text="👁️ Prosmotrlar", callback_data="tg_views")],
+        [InlineKeyboardButton(text="👍|👎 Reaksiyalar", callback_data="tg_reactions")],
+        [InlineKeyboardButton(text="📖 Istoriya ko'rish", callback_data="tg_story")],
+        [InlineKeyboardButton(text="🤖 Bot uchun START", callback_data="tg_start")],
+        [InlineKeyboardButton(text="✉️ Izohlar + 🔄 Ulashishlar", callback_data="tg_comments")],
+        [InlineKeyboardButton(text="🔙 Orqaga", callback_data="main_menu")]
+    ])
     
-    await message.answer("🛍️ Telegram xizmatlari\n\nQuyidagi ichki bo'limlardan birini tanlang:", 
-                         reply_markup=builder.as_markup(), parse_mode="Markdown")
+    await message.answer("🛍️ Telegram\n\nQuyidagi ichki bo'limlardan birini tanlang:", reply_markup=kb)
 # --- BOTNI ISHGA TUSHIRISH ---
 async def main():
     print("Bot muvaffaqiyatli ishga tushdi...")
