@@ -156,3 +156,17 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+    # --- INSTAGRAM MENYUSI ---
+@dp.message(F.text == "🛍️ Instagram")
+async def instagram_menu(message: types.Message):
+    builder = InlineKeyboardBuilder()
+    builder.row(types.InlineKeyboardButton(text="👤 Instagram obunachilar", callback_data="ig_subs"))
+    builder.row(types.InlineKeyboardButton(text="👁️ Prasmo'tr", callback_data="ig_views"))
+    builder.row(types.InlineKeyboardButton(text="❤️ Like", callback_data="ig_likes"))
+    builder.row(types.InlineKeyboardButton(text="📖 Istoriya ko'rish", callback_data="ig_story"))
+    builder.row(types.InlineKeyboardButton(text="📊 Istoriya uchun ovoz", callback_data="ig_poll"))
+    builder.row(types.InlineKeyboardButton(text="📱 Repost | Save | Kament", callback_data="ig_misc"))
+    builder.row(types.InlineKeyboardButton(text="🔙 Orqaga", callback_data="main_menu"))
+    
+    await message.answer("🛍️ Instagram\n\nQuyidagi ichki bo'limlardan birini tanlang:", 
+                         reply_markup=builder.as_markup(), parse_mode="Markdown")
