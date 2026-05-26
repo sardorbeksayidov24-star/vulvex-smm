@@ -156,20 +156,34 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
- # --- INSTAGRAM VA ORQAGA QAYTISH TUGMALARI ---
-
+ # --- INSTAGRAM MENYUSI (6 TA TUGMA BILAN) ---
 @dp.message(F.text == "🛍️ Instagram")
 async def instagram_services(message: types.Message):
     builder = InlineKeyboardBuilder()
     builder.row(types.InlineKeyboardButton(text="👤 Instagram obunachilar", callback_data="ig_subs"))
     builder.row(types.InlineKeyboardButton(text="👁️ Prasmo'tr", callback_data="ig_views"))
     builder.row(types.InlineKeyboardButton(text="❤️ Like", callback_data="ig_likes"))
+    builder.row(types.InlineKeyboardButton(text="📖 Istoriya ko'rish", callback_data="ig_story"))
+    builder.row(types.InlineKeyboardButton(text="📊 Istoriya uchun ovoz", callback_data="ig_poll"))
+    builder.row(types.InlineKeyboardButton(text="📱 Repost | Save | Kament", callback_data="ig_other"))
     builder.row(types.InlineKeyboardButton(text="🔙 Orqaga", callback_data="main_menu"))
     
-    await message.answer("🛍️ Instagram xizmatlari\n\nQuyidagi bo'limlardan birini tanlang:", 
+    builder.adjust(1) # Hammasini bir qatorga teradi
+    
+    await message.answer("🛍️ Instagram xizmatlari\n\nQuyidagi ichki bo'limlardan birini tanlang:", 
                          reply_markup=builder.as_markup(), parse_mode="Markdown")
 
+# --- ASOSIY MENYUGA QAYTISH ---
 @dp.callback_query(F.data == "main_menu")
 async def back_to_main(callback: types.CallbackQuery):
     await callback.message.delete()
     await callback.message.answer("Siz asosiy menyudasiz!")
+
+# --- BOTNI ISHGA TUSHIRISH (TO'G'RILANGAN) ---
+async def main():
+    print("Bot muvaffaqiyatli ishga tushdi...")
+    await dp.start_polling(bot)
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())
