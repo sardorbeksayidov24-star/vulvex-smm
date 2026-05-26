@@ -2,7 +2,7 @@ import asyncio
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
-
+from aiogram.utils.keyboard import InlineKeyboardBuilder
 # --- 1. SOZLAMALAR ---
 BOT_TOKEN = "8835809644:AAFapOaMC8SXgxISGTq7Jz9huCmLYLO7oAU"
 ADMIN_ID = 6831436355
@@ -131,13 +131,18 @@ async def start_payment(message: types.Message):
     
     await message.answer(text, reply_markup=pay_buttons, parse_mode="Markdown")
     # --- 7. SOZLANAYOTGAN TUGMALAR JAVOBI ---
+# --- TELEGRAM XIZMATLARI MENYUSI ---
 @dp.message(F.text == "🛍️ Telegram")
-async def telegram_menu(message: types.Message):
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="👤 Obunachi", callback_data="tg_subs")],
-        [InlineKeyboardButton(text="🔙 Ortga", callback_data="main_menu")]
-    ])
-    await message.answer("📢 Telegram xizmatlari:", reply_markup=kb)
+async def telegram_services(message: types.Message):
+    # Neo SMM kabi chiroyli tugmalar ro'yxati
+    builder = InlineKeyboardBuilder()
+    builder.row(types.InlineKeyboardButton(text="👤 Telegram obunachi", callback_data="tg_subs"))
+    builder.row(types.InlineKeyboardButton(text="⭐ Premium obunachi", callback_data="tg_prem"))
+    builder.row(types.InlineKeyboardButton(text="📢 Prosmotrlar", callback_data="tg_views"))
+    builder.row(types.InlineKeyboardButton(text="🔙 Orqaga", callback_data="main_menu"))
+    
+    await message.answer("🛍️ Telegram xizmatlari\n\nQuyidagi ichki bo'limlardan birini tanlang:", 
+                         reply_markup=builder.as_markup(), parse_mode="Markdown")
 # --- BOTNI ISHGA TUSHIRISH ---
 async def main():
     print("Bot muvaffaqiyatli ishga tushdi...")
