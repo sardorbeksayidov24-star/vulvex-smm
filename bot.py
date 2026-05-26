@@ -156,9 +156,9 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-    # --- INSTAGRAM MENYUSI ---
+   # --- INSTAGRAM MENYUSI ---
 @dp.message(F.text == "🛍️ Instagram")
-async def instagram_menu(message: types.Message):
+async def instagram_services(message: types.Message):
     builder = InlineKeyboardBuilder()
     builder.row(types.InlineKeyboardButton(text="👤 Instagram obunachilar", callback_data="ig_subs"))
     builder.row(types.InlineKeyboardButton(text="👁️ Prasmo'tr", callback_data="ig_views"))
@@ -168,5 +168,26 @@ async def instagram_menu(message: types.Message):
     builder.row(types.InlineKeyboardButton(text="📱 Repost | Save | Kament", callback_data="ig_misc"))
     builder.row(types.InlineKeyboardButton(text="🔙 Orqaga", callback_data="main_menu"))
     
-    await message.answer("🛍️ Instagram\n\nQuyidagi ichki bo'limlardan birini tanlang:", 
+    await message.answer("🛍️ Instagram xizmatlari\n\nQuyidagi bo'limlardan birini tanlang:", 
                          reply_markup=builder.as_markup(), parse_mode="Markdown")
+
+# --- TIK TOK MENYUSI ---
+@dp.message(F.text == "🛍️ Tik Tok")
+async def tiktok_services(message: types.Message):
+    builder = InlineKeyboardBuilder()
+    builder.row(types.InlineKeyboardButton(text="👤 Tik Tok Obunachi", callback_data="tt_subs"))
+    builder.row(types.InlineKeyboardButton(text="👁 Tik Tok Prasmo'tr", callback_data="tt_views"))
+    builder.row(types.InlineKeyboardButton(text="❤️ Tik Tok Like", callback_data="tt_likes"))
+    builder.row(types.InlineKeyboardButton(text="📥 Tik Tok save", callback_data="tt_save"))
+    builder.row(types.InlineKeyboardButton(text="💬 Izohlar | Comments", callback_data="tt_comments"))
+    builder.row(types.InlineKeyboardButton(text="🔄 Ulashishlar | Shares", callback_data="tt_shares"))
+    builder.row(types.InlineKeyboardButton(text="🔙 Orqaga", callback_data="main_menu"))
+    
+    await message.answer("🛍️ Tik Tok xizmatlari\n\nQuyidagi bo'limlardan birini tanlang:", 
+                         reply_markup=builder.as_markup(), parse_mode="Markdown")
+
+# --- ORQAGA QAYTISH TUGMASI (CALLBACK) ---
+@dp.callback_query(F.data == "main_menu")
+async def back_to_main(callback: types.CallbackQuery):
+    await callback.message.delete()
+    await callback.message.answer("Siz asosiy menyudasiz!")
